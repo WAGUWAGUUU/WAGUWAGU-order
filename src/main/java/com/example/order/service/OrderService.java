@@ -14,6 +14,7 @@ public interface OrderService {
     void save(Order order);
     List<OrderHistory> selectByStoreDate(Long storeId, Timestamp startDate, Timestamp endDate,Long offset);
     List<OrderHistory> OrderHistoryFindByCustomerId(Long customerId,Long offset);
+    List<OrderHistory> selectByStoreDateAll(Long storeId,Timestamp startTimestamp,Timestamp endTimestamp);
     void OrderHistoryDelete(Long id);
     List<Order> getOrderStoreId(Long requestId);
     List<Order> getOrderCustomerId(Long requestId);

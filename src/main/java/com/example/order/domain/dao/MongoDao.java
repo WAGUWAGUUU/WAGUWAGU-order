@@ -13,6 +13,7 @@ public interface MongoDao {
 //    List<OrderHistory> selectByCustomerIdDate(Long customerId, Timestamp startDate, Timestamp endDate, int pageNumber, int pageSize);
 //    유저 경우 개인 주문건이 아무리 많아도 1인 유저가 주문할 데이터는 한정이 될 것으로 유저 아이디로 전체를 찾는 것으로 구현 이후 해당 로직은 페이징처리로 서부 부하와 데이터베이스 부하 처리
     List<OrderHistory> selectByStoreDate(Long storeId, Timestamp startDate, Timestamp endDate,  Long offset, int pageSize);
+    List<OrderHistory> selectByStoreDateAll(Long storeId, Timestamp startDate, Timestamp endDate);
     List<OrderHistory> findByCustomerId(Long customerId, Long offset);
     void save(OrderHistory orderHistory);
     UpdateResult delete(Long id);

@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -22,19 +23,30 @@ public class MongoDaoImpl implements MongoDao {
     @Override
     public List<OrderHistory> selectByStoreDate(Long storeId, Timestamp startDate, Timestamp endDate,  Long offset, int pageSize) {
         Query query = new Query();
+        query.addCriteria(Criteria.where("storeId").is(storeId).and("isDeleted").is(false));
+//        query.skip(offset * pageSize).limit(pageSize);
+        return mongoTemplate.find(query, OrderHistory.class);
+    }
+
+    @Override
+    public List<OrderHistory> selectByStoreDateAll(Long storeId, Timestamp startDate, Timestamp endDate) {
+        Query query = new Query();
         query.addCriteria(Criteria.where("storeId").is(storeId)
                 .and("CREATED").gte(startDate).lt(endDate)
                 .and("isDeleted").is(false));
-        query.skip(offset * pageSize).limit(pageSize);
         return mongoTemplate.find(query, OrderHistory.class);
     }
 
     @Override
     public List<OrderHistory> findByCustomerId(Long customerId, Long offset) {
-//        int pageSize = 10;
+        int pageSize = 10;
         Query query = new Query();
         query.addCriteria(Criteria.where("customerId").is(customerId).and("isDeleted").is(false));
-//        query.skip(offset).limit(pageSize);
+        long totalCount = mongoTemplate.count(query, OrderHistory.class);
+        if (offset >= totalCount) {
+            return Collections.emptyList();
+        }
+        query.skip(offset).limit(pageSize);
         List<OrderHistory> orderHistories = mongoTemplate.find(query, OrderHistory.class);
         return orderHistories;
     }

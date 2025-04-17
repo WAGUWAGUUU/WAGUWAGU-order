@@ -4,7 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record KafkaPushReqDTO(
-        Long customerId
+        Long customerId,
+        String storeName
 )
 {
 }

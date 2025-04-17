@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/order")
+@RequestMapping("api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -82,6 +82,18 @@ public class OrderController {
         Timestamp startTimestamp = new Timestamp(Long.parseLong(startDate));
         Timestamp endTimestamp = new Timestamp(Long.parseLong(endDate));
         return orderService.selectByStoreDate(storeId, startTimestamp, endTimestamp, offset);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{storeId}/history/all")
+    public List<OrderHistory> selectByStoreDateAll(
+            @PathVariable Long storeId,
+            @RequestParam String startDate,
+            @RequestParam String endDate
+    ) {
+        Timestamp startTimestamp = new Timestamp(Long.parseLong(startDate));
+        Timestamp endTimestamp = new Timestamp(Long.parseLong(endDate));
+        return orderService.selectByStoreDateAll(storeId, startTimestamp, endTimestamp);
     }
 
     @ResponseStatus(HttpStatus.OK)

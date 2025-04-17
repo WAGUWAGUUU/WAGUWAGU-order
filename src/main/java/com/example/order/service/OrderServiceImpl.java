@@ -46,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
 
         KafkaPushReqDTO kafkaPushReqDTO = KafkaPushReqDTO.builder()
                 .customerId(update.getCustomerId())
+                .storeName(update.getStoreName())
                 .build();
         kafkaProducer.KafkaPushReqSend(kafkaPushReqDTO, String.valueOf(statusType));
         System.out.println(kafkaPushReqDTO.customerId());
@@ -105,9 +106,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderHistory> selectByStoreDateAll(Long storeId, Timestamp startTimestamp, Timestamp endTimestamp) {
+        return mongoDao.selectByStoreDateAll(storeId,startTimestamp,endTimestamp);
+    }
+
+
+    @Override
     public List<OrderHistory> OrderHistoryFindByCustomerId(Long customerId ,Long offset) {
         return mongoDao.findByCustomerId(customerId,offset);
     }
+
 
     @Override
     public void OrderHistoryDelete(Long id) {
